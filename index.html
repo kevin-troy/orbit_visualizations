@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Keplerian Orbit Visualizer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital@1&family=PT+Sans:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        margin: 0;
+        -webkit-font-smoothing: antialiased;
+      }
+      .font-exo{
+        font-family: 'Exo 2', sans-serif;
+        text-shadow: 1px 1px 3px #FFFFFF
+      }
+      .center{
+        margin: auto;
+        padding: 10px;
+        text-align: middle;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="bg"></canvas>
+    <div class="absolute text-white" style="top:50%; left:50%; transform: translate(-50%,-60%); text-align: center;">
+      <p id="kep-title" class="font-exo text-7xl">  Keplerian Orbit Visualizer </p>
+      <button id="launch-btn"
+        class="font-exo uppercase border text-2xl px-4 py-2 rounded-lg mt-12 hover:bg-white hover:text-gray-800 inline-block shadow-md shadow-white"> 
+        Launch
+        
+      </button>
+    <script type="module" src="/main.js"></script>
+    </div>
+  </body>
+</html>
