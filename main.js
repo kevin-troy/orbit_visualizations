@@ -24,7 +24,7 @@ const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#bg')
 })
 
-const spaceTexture = new THREE.TextureLoader().load('imgs/space.jpg');
+const spaceTexture = new THREE.TextureLoader().load('/imgs/space.jpg');
 scene.background = spaceTexture;
 
 // Init controls
@@ -44,8 +44,8 @@ camera.lookAt(-EARTH_DISPLACEMENT, 0, 0)
 renderer.render(scene, camera);
 
 // Create moon obj
-const moonMap = new THREE.TextureLoader().load('imgs/moon_4k_color_brim16.jpg');
-const moonNormalMap = new THREE.TextureLoader().load('imgs/moon_4k_normal.jpg');
+const moonMap = new THREE.TextureLoader().load('/imgs/moon_4k_color_brim16.jpg');
+const moonNormalMap = new THREE.TextureLoader().load('/imgs/moon_4k_normal.jpg');
 
 
 const moon = new THREE.Mesh(
@@ -71,8 +71,8 @@ controls.update();
 
 
 // Create earth obj
-const earthMap = new THREE.TextureLoader().load('imgs/earth_4k.jpg');
-const earthBumpMap = new THREE.TextureLoader().load('imgs/earth_bump.jpg');
+const earthMap = new THREE.TextureLoader().load('/imgs/earth_4k.jpg');
+const earthBumpMap = new THREE.TextureLoader().load('/imgs/earth_bump.jpg');
 const earth = new THREE.Mesh(
   new THREE.SphereGeometry(EARTH_RADIUS_MOONS, 500, 500),
   new THREE.MeshLambertMaterial({
@@ -103,12 +103,12 @@ moon.translateX(-0.5)                 //offset moon for ~aesthetics~
 // Create skybox
 const loader = new THREE.CubeTextureLoader();
 const skybox_texture = loader.load([
-  'imgs/starfield/front.png',
-  'imgs/starfield/back.png',
-  'imgs/starfield/left.png',
-  'imgs/starfield/right.png',
-  'imgs/starfield/top.png',
-  'imgs/starfield/bottom.png',
+  '/imgs/starfield/front.png',
+  '/imgs/starfield/back.png',
+  '/imgs/starfield/left.png',
+  '/imgs/starfield/right.png',
+  '/imgs/starfield/top.png',
+  '/imgs/starfield/bottom.png',
 ]);
 scene.background = skybox_texture;
 
