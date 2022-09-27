@@ -14,7 +14,7 @@ import skyboxBottom from '/imgs/starfield/bottom.png';
 
 // Actual pkg imports
 import * as THREE from 'three';
-import { SphereGeometry, TetrahedronGeometry } from 'three';
+import { SphereGeometry, TetrahedronGeometry, Vector3 } from 'three';
 import { OrbitControls } from '/node_modules/three/examples/jsm/controls/OrbitControls'
 import gsap from 'gsap';
 import * as dat from 'dat.gui'
@@ -52,13 +52,16 @@ const renderer = new THREE.WebGLRenderer({
 
 // Init controls
 const controls =  new OrbitControls(camera, renderer.domElement);
+controls.enablePan = false;
+controls.enableRotate = false;
+controls.enabled = false;
 
 const loadMgr = new THREE.LoadingManager();
 loadMgr.onStart = function(){
-  console.log('Begin loading');
+  console.log('Loading assets...');
 }
 loadMgr.onLoad = function(){
-  console.log('Complete')
+  console.log('Assets successfully loaded!')
   launchElement.style.visibility = "visible"; 
   scene.add(earth);
   scene.add(moon);
@@ -129,71 +132,15 @@ function onPageLoad(){
   camera.lookAt(-EARTH_DISPLACEMENT, 0, 0)
   renderer.render(scene, camera);
 
-  /*
-  // Create moon obj
-  const moonMap = new THREE.TextureLoader().load('/imgs/moon_4k_color_brim16.jpg');
-  const moonNormalMap = new THREE.TextureLoader().load('/imgs/moon_4k_normal.jpg');
-
-  const moon = new THREE.Mesh(
-    new THREE.SphereGeometry(1,50,50),
-    new THREE.MeshStandardMaterial({
-      map: moonMap,
-      normalMap: moonNormalMap
-    })
-  )
-  moon.name = "moon";
-  */
   controls.target = new THREE.Vector3(-EARTH_DISPLACEMENT,0,0);
   controls.update();
-
-  /*
-  // Create earth obj
-  const earthMap = new THREE.TextureLoader().load('/imgs/earth_4k.jpg');
-  const earthBumpMap = new THREE.TextureLoader().load('/imgs/earth_bump.jpg');
-  const earth = new THREE.Mesh(
-    new THREE.SphereGeometry(EARTH_RADIUS_MOONS, 500, 500),
-    new THREE.MeshLambertMaterial({
-      map: earthMap,
-      bumpMap: earthBumpMap,
-      bumpScale: 0.1
-    })
-  )
-  earth.name = "earth";
-  */
-
-  //const lightHelper = new THREE.PointLightHelper(earthLight);
-
-  //const axesHelper = new THREE.AxesHelper( 5 );
-  //scene.add( axesHelper );
 
   const ambientLight = new THREE.AmbientLight( 0x404040 , 0.5); // soft white light
   scene.add(ambientLight);
 
-  // Add objs to scene
-  //scene.add(earth);
-  //scene.add(moon)
   scene.add(moonLight)
   scene.add(earthLight)
-  //scene.add(lightHelper)
 
-  /*
-  moon.translateX(-EARTH_DISPLACEMENT)  //place earth w.r.t moon
-  moon.translateX(-0.5)                 //offset moon for ~aesthetics~
-
-  // Create skybox
-  const loader = new THREE.CubeTextureLoader();
-  const skybox_texture = loader.load([
-    '/imgs/starfield/front.png',
-    '/imgs/starfield/back.png',
-    '/imgs/starfield/left.png',
-    '/imgs/starfield/right.png',
-    '/imgs/starfield/top.png',
-    '/imgs/starfield/bottom.png',
-  ]);
-  scene.background = skybox_texture;
-  */
-  initOrbit();
-  //animate();
 }
 
 function initOrbit(){
@@ -347,8 +294,10 @@ function launchSequence(){
     onComplete: function(){
       camera.lookAt(0,0,0)
       controls.target = new THREE.Vector3(0,0,0);
+      controls.enabled = true;
+      controls.enableRotate = true;
       controls.update();
-      //scene.remove(scene.getObjectByName("moon"));
+      initOrbit();
       initTriad();
       const gui = new dat.GUI()
 
