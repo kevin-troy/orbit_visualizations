@@ -184,7 +184,6 @@ function initTriad(){
   triadLine.add(yLine);
   triadLine.add(zLine);
   scene.add(triadLine);
-  console.log(triadLine)
 }
 
 
@@ -237,7 +236,6 @@ function refreshOrbit(){
 }
 
 
-
 // Main() 
 function animate(){
   requestAnimationFrame(animate);
@@ -245,7 +243,6 @@ function animate(){
   controls.update();
 
   const moon = scene.getObjectByName("moon");
-  console.log(moon);
   moon.rotation.y += 0.001
   const earth = scene.getObjectByName("earth");
   earth.rotation.y += 0.001*6.5;
@@ -277,8 +274,7 @@ function launchSequence(){
       camera.lookAt(0,0,0)
       controls.target = new THREE.Vector3(0,0,0);
       controls.update();
-      //initOrbit();
-      scene.remove(moon);
+      scene.remove(scene.getObjectByName("moon"));
       initTriad();
       const gui = new dat.GUI()
 
