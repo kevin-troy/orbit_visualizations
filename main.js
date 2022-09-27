@@ -37,12 +37,113 @@ const renderer = new THREE.WebGLRenderer({
 // Init controls
 const controls =  new OrbitControls(camera, renderer.domElement);
 
+
+var textures = {
+  'moonMap':{
+    path: '/imgs/moon_4k_color_brim16.jpg',
+    val: undefined
+  },
+  'moonNormalMap':{
+    path: '/imgs/moon_4k_normal.jpg',
+    val: undefined
+  }, 
+  'earthMap':{
+    path: '/imgs/earth_4k.jpg',
+    val: undefined
+  },
+  'earthBumpMap':{
+    path: '/imgs/earth_bump.jpg',
+    val: undefined
+  },
+  'skybox':{
+    path: ['/imgs/starfield/front.png',
+      '/imgs/starfield/back.png',
+      '/imgs/starfield/left.png',
+      '/imgs/starfield/right.png',
+      '/imgs/starfield/top.png',
+      '/imgs/starfield/bottom.png',
+    ],
+    val: undefined
+  }
+}
+
+const loadMgr = new THREE.LoadingManager();
+loadMgr.onStart = function(){
+  console.log('Begin loading');
+}
+loadMgr.onLoad = function(){
+  console.log('Complete')
+  launchElement.style.visibility = "visible"; 
+}
+/*
+function loadTextures(textures){
+  var key;
+  const textureLoader = new THREE.TextureLoader(loadMgr);
+  const cubeLoader = new THREE.CubeTextureLoader(loadMgr);
+
+  for(key in textures){
+    if (typeof textures[key].path == 'string'){
+      textureLoader.load(textures[key].path)
+    }
+    else if (typeof textures[key].path == 'object'){
+      cubeLoader.load(textures[key].path)
+    }
+  } 
+}
+*/
+function initTextures(){
+  const textureLoader = new THREE.TextureLoader(loadMgr);
+  const cubeLoader = new THREE.CubeTextureLoader(loadMgr);
+
+  // Moon
+  const moonMap = textureLoader.load('/imgs/moon_4k_color_brim16.jpg');
+  const moonNormalMap = textureLoader.load('/imgs/moon_4k_normal.jpg');
+
+  const moon = new THREE.Mesh(
+    new THREE.SphereGeometry(1,50,50),
+    new THREE.MeshStandardMaterial({
+      map: moonMap,
+      normalMap: moonNormalMap
+    })
+  )
+  moon.name = "moon";
+  scene.add(moon);
+  moon.translateX(-EARTH_DISPLACEMENT)  //place earth w.r.t moon
+  moon.translateX(-0.5)                 //offset moon for ~aesthetics~
+
+  //Earth
+  const earthMap = textureLoader.load('/imgs/earth_4k.jpg');
+  const earthBumpMap = textureLoader.load('/imgs/earth_bump.jpg');
+  const earth = new THREE.Mesh(
+    new THREE.SphereGeometry(EARTH_RADIUS_MOONS, 500, 500),
+    new THREE.MeshLambertMaterial({
+      map: earthMap,
+      bumpMap: earthBumpMap,
+      bumpScale: 0.1
+    })
+  )
+  earth.name = "earth";
+  scene.add(earth);
+
+  //Skybox
+  const skybox_texture = cubeLoader.load([
+    '/imgs/starfield/front.png',
+    '/imgs/starfield/back.png',
+    '/imgs/starfield/left.png',
+    '/imgs/starfield/right.png',
+    '/imgs/starfield/top.png',
+    '/imgs/starfield/bottom.png',
+  ]);
+  scene.background = skybox_texture;
+
+}
+
+
 function onPageLoad(){
 
   //const spaceTexture = new THREE.TextureLoader().load('/imgs/space.jpg');
   //scene.background = spaceTexture;
-
-
+  initTextures();
   // Add lighting
   const moonLight = new THREE.PointLight(0xffffff, 1, 100, 2);
   const earthLight = new THREE.PointLight(0xffffff, 1, 200, 2);
@@ -56,6 +157,7 @@ function onPageLoad(){
   camera.lookAt(-EARTH_DISPLACEMENT, 0, 0)
   renderer.render(scene, camera);
 
+  /*
   // Create moon obj
   const moonMap = new THREE.TextureLoader().load('/imgs/moon_4k_color_brim16.jpg');
   const moonNormalMap = new THREE.TextureLoader().load('/imgs/moon_4k_normal.jpg');
@@ -68,11 +170,11 @@ function onPageLoad(){
     })
   )
   moon.name = "moon";
-
+  */
   controls.target = new THREE.Vector3(-EARTH_DISPLACEMENT,0,0);
   controls.update();
 
-
+  /*
   // Create earth obj
   const earthMap = new THREE.TextureLoader().load('/imgs/earth_4k.jpg');
   const earthBumpMap = new THREE.TextureLoader().load('/imgs/earth_bump.jpg');
@@ -85,6 +187,7 @@ function onPageLoad(){
     })
   )
   earth.name = "earth";
+  */
 
   //const lightHelper = new THREE.PointLightHelper(earthLight);
 
@@ -95,12 +198,13 @@ function onPageLoad(){
   scene.add(ambientLight);
 
   // Add objs to scene
-  scene.add(earth);
-  scene.add(moon)
+  //scene.add(earth);
+  //scene.add(moon)
   scene.add(moonLight)
   scene.add(earthLight)
   //scene.add(lightHelper)
 
+  /*
   moon.translateX(-EARTH_DISPLACEMENT)  //place earth w.r.t moon
   moon.translateX(-0.5)                 //offset moon for ~aesthetics~
 
@@ -115,6 +219,7 @@ function onPageLoad(){
     '/imgs/starfield/bottom.png',
   ]);
   scene.background = skybox_texture;
+  */
   initOrbit();
   animate();
 }
@@ -178,7 +283,6 @@ function initTriad(){
   yLine.rotation.y = math.pi/2;
   yLine.position.z += AX_LENGTH/2;
 
-
   const triadLine = new THREE.Group();
   triadLine.add(xLine);
   triadLine.add(yLine);
@@ -235,7 +339,6 @@ function refreshOrbit(){
 
 }
 
-
 // Main() 
 function animate(){
   requestAnimationFrame(animate);
@@ -261,7 +364,6 @@ function launchSequence(){
   titleTextStyle.opacity = 1;
   (function fade(){(titleTextStyle.opacity-=.02)<0?titleTextStyle.display="none":setTimeout(fade,5)})();
 
-
   tl.to(camera.position,{
     x: 30,
     y: 0,
@@ -274,7 +376,7 @@ function launchSequence(){
       camera.lookAt(0,0,0)
       controls.target = new THREE.Vector3(0,0,0);
       controls.update();
-      scene.remove(scene.getObjectByName("moon"));
+      //scene.remove(scene.getObjectByName("moon"));
       initTriad();
       const gui = new dat.GUI()
 
