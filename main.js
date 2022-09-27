@@ -1,5 +1,8 @@
 import '/style.css'
 
+import moonMapURL from '/imgs/moon_4k_color_brim16.jpg';
+import moonNormalMapURL from '/imgs/moon_4k_normal.jpg';
+
 import * as THREE from 'three';
 import { SphereGeometry, TetrahedronGeometry } from 'three';
 import { OrbitControls } from '/node_modules/three/examples/jsm/controls/OrbitControls'
@@ -40,36 +43,6 @@ const renderer = new THREE.WebGLRenderer({
 // Init controls
 const controls =  new OrbitControls(camera, renderer.domElement);
 
-
-var textures = {
-  'moonMap':{
-    path: '/imgs/moon_4k_color_brim16.jpg',
-    val: undefined
-  },
-  'moonNormalMap':{
-    path: '/imgs/moon_4k_normal.jpg',
-    val: undefined
-  }, 
-  'earthMap':{
-    path: '/imgs/earth_4k.jpg',
-    val: undefined
-  },
-  'earthBumpMap':{
-    path: '/imgs/earth_bump.jpg',
-    val: undefined
-  },
-  'skybox':{
-    path: ['/imgs/starfield/front.png',
-      '/imgs/starfield/back.png',
-      '/imgs/starfield/left.png',
-      '/imgs/starfield/right.png',
-      '/imgs/starfield/top.png',
-      '/imgs/starfield/bottom.png',
-    ],
-    val: undefined
-  }
-}
-
 const loadMgr = new THREE.LoadingManager();
 loadMgr.onStart = function(){
   console.log('Begin loading');
@@ -88,8 +61,8 @@ function initTextures(){
   const cubeLoader = new THREE.CubeTextureLoader(loadMgr);
 
   // Moon
-  const moonMap = textureLoader.load('/imgs/moon_4k_color_brim16.jpg');
-  const moonNormalMap = textureLoader.load('/imgs/moon_4k_normal.jpg');
+  const moonMap = textureLoader.load(moonMapURL);
+  const moonNormalMap = textureLoader.load(moonNormalMapURL);
 
   moon = new THREE.Mesh(
     new THREE.SphereGeometry(1,50,50),
