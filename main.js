@@ -1,8 +1,18 @@
 import '/style.css'
 
+//Spaghetti img imports:
 import moonMapURL from '/imgs/moon_4k_color_brim16.jpg';
 import moonNormalMapURL from '/imgs/moon_4k_normal.jpg';
+import earthMapURL from '/imgs/earth_4k.jpg';
+import earthBumpMapURL from '/imgs/earth_bump.jpg';
+import skyboxFront from '/imgs/starfield/front.png';
+import skyboxBack from '/imgs/starfield/back.png';
+import skyboxLeft from '/imgs/starfield/left.png';
+import skyboxRight from '/imgs/starfield/right.png';
+import skyboxTop from '/imgs/starfield/top.png';
+import skyboxBottom from '/imgs/starfield/bottom.png';
 
+// Actual pkg imports
 import * as THREE from 'three';
 import { SphereGeometry, TetrahedronGeometry } from 'three';
 import { OrbitControls } from '/node_modules/three/examples/jsm/controls/OrbitControls'
@@ -76,8 +86,8 @@ function initTextures(){
   moon.translateX(-0.5)                 //offset moon for ~aesthetics~
 
   //Earth
-  const earthMap = textureLoader.load('/imgs/earth_4k.jpg');
-  const earthBumpMap = textureLoader.load('/imgs/earth_bump.jpg');
+  const earthMap = textureLoader.load(earthMapURL);
+  const earthBumpMap = textureLoader.load(earthBumpMapURL);
   earth = new THREE.Mesh(
     new THREE.SphereGeometry(EARTH_RADIUS_MOONS, 500, 500),
     new THREE.MeshLambertMaterial({
@@ -90,12 +100,12 @@ function initTextures(){
 
   //Skybox
   const skybox_texture = cubeLoader.load([
-    '/imgs/starfield/front.png',
-    '/imgs/starfield/back.png',
-    '/imgs/starfield/left.png',
-    '/imgs/starfield/right.png',
-    '/imgs/starfield/top.png',
-    '/imgs/starfield/bottom.png',
+    skyboxFront,
+    skyboxBack,
+    skyboxLeft,
+    skyboxRight,
+    skyboxTop,
+    skyboxBottom,
   ]);
   scene.background = skybox_texture;
 }
