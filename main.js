@@ -28,6 +28,9 @@ const orbit = {
   }
 }
 
+let earth;
+let moon;
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(85, innerWidth/innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({
@@ -74,23 +77,12 @@ loadMgr.onStart = function(){
 loadMgr.onLoad = function(){
   console.log('Complete')
   launchElement.style.visibility = "visible"; 
+  scene.add(earth);
+  scene.add(moon);
+  animate();
 }
-/*
-function loadTextures(textures){
-  var key;
-  const textureLoader = new THREE.TextureLoader(loadMgr);
-  const cubeLoader = new THREE.CubeTextureLoader(loadMgr);
 
-  for(key in textures){
-    if (typeof textures[key].path == 'string'){
-      textureLoader.load(textures[key].path)
-    }
-    else if (typeof textures[key].path == 'object'){
-      cubeLoader.load(textures[key].path)
-    }
-  } 
-}
-*/
+
 function initTextures(){
   const textureLoader = new THREE.TextureLoader(loadMgr);
   const cubeLoader = new THREE.CubeTextureLoader(loadMgr);
@@ -99,7 +91,7 @@ function initTextures(){
   const moonMap = textureLoader.load('/imgs/moon_4k_color_brim16.jpg');
   const moonNormalMap = textureLoader.load('/imgs/moon_4k_normal.jpg');
 
-  const moon = new THREE.Mesh(
+  moon = new THREE.Mesh(
     new THREE.SphereGeometry(1,50,50),
     new THREE.MeshStandardMaterial({
       map: moonMap,
@@ -107,14 +99,13 @@ function initTextures(){
     })
   )
   moon.name = "moon";
-  scene.add(moon);
   moon.translateX(-EARTH_DISPLACEMENT)  //place earth w.r.t moon
   moon.translateX(-0.5)                 //offset moon for ~aesthetics~
 
   //Earth
   const earthMap = textureLoader.load('/imgs/earth_4k.jpg');
   const earthBumpMap = textureLoader.load('/imgs/earth_bump.jpg');
-  const earth = new THREE.Mesh(
+  earth = new THREE.Mesh(
     new THREE.SphereGeometry(EARTH_RADIUS_MOONS, 500, 500),
     new THREE.MeshLambertMaterial({
       map: earthMap,
@@ -123,7 +114,6 @@ function initTextures(){
     })
   )
   earth.name = "earth";
-  scene.add(earth);
 
   //Skybox
   const skybox_texture = cubeLoader.load([
@@ -135,15 +125,14 @@ function initTextures(){
     '/imgs/starfield/bottom.png',
   ]);
   scene.background = skybox_texture;
-
 }
 
 
 function onPageLoad(){
 
-  //const spaceTexture = new THREE.TextureLoader().load('/imgs/space.jpg');
-  //scene.background = spaceTexture;
+  //Begin texture loading
   initTextures();
+
   // Add lighting
   const moonLight = new THREE.PointLight(0xffffff, 1, 100, 2);
   const earthLight = new THREE.PointLight(0xffffff, 1, 200, 2);
@@ -221,7 +210,7 @@ function onPageLoad(){
   scene.background = skybox_texture;
   */
   initOrbit();
-  animate();
+  //animate();
 }
 
 function initOrbit(){
